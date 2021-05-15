@@ -6,9 +6,9 @@ import Pipe from '../sink/Pipe'
 import { Stream, Sink, Scheduler, Time, Disposable } from '@most/types'
 
 export default class FilterMap<A, B> implements Stream<B> {
-  private readonly p: (a: A) => boolean;
-  private readonly f: (a: A) => B;
-  private readonly source: Stream<A>;
+  readonly p: (a: A) => boolean;
+  readonly f: (a: A) => B;
+  readonly source: Stream<A>;
 
   constructor(p: (a: A) => boolean, f: (a: A) => B, source: Stream<A>) {
     this.p = p
@@ -22,8 +22,8 @@ export default class FilterMap<A, B> implements Stream<B> {
 }
 
 class FilterMapSink<A, B> extends Pipe<A, B> implements Sink<A> {
-  private readonly p: (a: A) => boolean;
-  private readonly f: (a: A) => B;
+  readonly p: (a: A) => boolean;
+  readonly f: (a: A) => B;
 
   constructor(p: (a: A) => boolean, f: (a: A) => B, sink: Sink<B>) {
     super(sink)
