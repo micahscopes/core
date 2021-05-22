@@ -3,6 +3,7 @@
 /** @author John Hann */
 
 import Map from '../fusion/Map'
+import Warp from '../fusion/Warp'
 import Pipe from '../sink/Pipe'
 import { Stream, Sink, Scheduler, Time, Disposable } from '@most/types'
 
@@ -14,6 +15,15 @@ import { Stream, Sink, Scheduler, Time, Disposable } from '@most/types'
  */
 export const map = <A, B>(f: (a: A) => B, stream: Stream<A>): Stream<B> =>
   Map.create(f, stream)
+
+/**
+ * Transform each time in the stream by applying g to each time value
+ * @param g mapping function
+ * @param stream stream to warp
+ * @returns stream containing items time-transformed by g
+ */
+export const warp = <A>(g: (t: Time) => Time, stream: Stream<A>): Stream<A> =>
+  Warp.create(g, stream)
 
 /**
 * Replace each value in the stream with x

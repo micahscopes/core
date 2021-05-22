@@ -70,7 +70,7 @@ export const startWith: StartWith = curry2(_startWith)
 // -----------------------------------------------------------------------
 // Transforming
 
-import { map as _map, constant as _constant, tap as _tap } from './combinator/transform'
+import { map as _map, warp as _warp, constant as _constant, tap as _tap } from './combinator/transform'
 import { ap as _ap } from './combinator/applicative'
 
 interface Map {
@@ -78,6 +78,11 @@ interface Map {
   <A, B>(f: (a: A) => B): (s: Stream<A>) => Stream<B>
 }
 export const map: Map = curry2(_map)
+interface Warp {
+  <A>(g: (t: Time) => Time, s: Stream<A>): Stream<A>
+  <A>(g: (t: Time) => Time): (s: Stream<A>) => Stream<A>
+}
+export const warp: Warp = curry2(_warp)
 interface Constant {
   <A, B>(b: B, s: Stream<A>): Stream<B>
   <A, B>(b: B): (s: Stream<A>) => Stream<B>

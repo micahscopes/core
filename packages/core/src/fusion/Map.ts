@@ -4,7 +4,11 @@
 
 import Pipe from '../sink/Pipe'
 import Filter from './Filter'
+import Warp from './Warp'
+import MapWarp from './MapWarp'
 import FilterMap from './FilterMap'
+import FilterWarp from './FilterWarp'
+import FilterMapWarp from './FilterMapWarp'
 import { compose } from '@most/prelude'
 import { isCanonicalEmpty, empty } from '../source/empty'
 import { Stream, Sink, Scheduler, Time, Disposable } from '@most/types'
@@ -42,6 +46,25 @@ export default class Map<A, B> implements Stream<B> {
       return new FilterMap(source.p, f, source.source)
     }
 
+    if (source instanceof Warp) {
+      return new MapWarp(f, source.g, source.source)
+    }
+
+    if (source instanceof FilterWarp) {
+      return new FilterMapWarp(source.p, f, source.g, source.source)
+    }
+
+    if (source instanceof MapWarp) {
+      return new MapWarp(compose(f, source.f), source.g, source.source)
+    }
+
+    if (source instanceof FilterMap) {
+      return new FilterMap(source.p, compose(f, source.f), source.source)
+    }
+
+    if (source instanceof FilterMapWarp) {
+      return new FilterMapWarp(source.p, compose(f, source.f), source.g, source.source)
+    }
     return new Map(f, source)
   }
 }
